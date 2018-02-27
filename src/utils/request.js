@@ -44,7 +44,7 @@ export default function request(url, options) {
     .then(data => ({
       data,
       headers: {
-        "x-total-count": 100
+        "x-total-count": 10
       }
     }))
     .catch(err => ({ err }));
