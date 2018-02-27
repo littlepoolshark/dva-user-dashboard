@@ -23,6 +23,11 @@ export default {
           page: parseInt(page, 10)
         }
       });
+    },
+    *remove({ paylaod: id }, { call, put, select }) {
+      yield call(userService.remove, id);
+      const page = yield select(state => state.users.page);
+      yield put({ type: "fetch", payload: { page } });
     }
   },
   subscriptions: {
