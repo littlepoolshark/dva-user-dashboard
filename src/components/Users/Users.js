@@ -1,9 +1,9 @@
 import React from "react";
 import { routerRedux } from "dva/router";
-import { Table, Pagination, Popconfirm } from "antd";
+import { Table, Pagination, Popconfirm, Button } from "antd";
 import styles from "./Users.css";
 import { PAGE_SIZE } from "../../constants";
-import  UserModal from "./UserModal.js";
+import UserModal from "./UserModal.js";
 
 function Users({
   dispatch,
@@ -12,6 +12,12 @@ function Users({
   page: current,
   isLoading
 }) {
+  function createHandler(values) {
+    dispatch({
+      type: "users/create",
+      payload: values
+    });
+  }
   function deleteHandler(id) {
     dispatch({
       type: "users/remove",
@@ -20,11 +26,11 @@ function Users({
   }
 
   function editHandler(id, values) {
-        dispatch({
-          type: 'users/patch',
-          payload: { id, values },
-        });
-      }  
+    dispatch({
+      type: "users/patch",
+      payload: { id, values }
+    });
+  }
 
   function pageChangeHandler(page) {
     dispatch(
@@ -60,7 +66,7 @@ function Users({
       render: (text, record) => (
         <span className={styles.operation}>
           <UserModal record={record} onOk={editHandler.bind(null, record.id)}>
-           <a href="javascript:void(0)">Edit</a>
+            <a href="javascript:void(0)">Edit</a>
           </UserModal>
           <Popconfirm
             title="Confirm to delete?"
@@ -76,6 +82,11 @@ function Users({
   return (
     <div className={styles.normal}>
       <div>
+        <UserModal record={{}} onOk={createHandler}>
+          <Button type="primary" className={styles.create}>
+            增加
+          </Button>
+        </UserModal>
         <Table
           columns={columns}
           dataSource={dataSource}

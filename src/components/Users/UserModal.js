@@ -1,28 +1,27 @@
-import React, { Component } from 'react';
-import { Modal, Form, Input } from 'antd';
-import styles from './UserModal.css';
+import React, { Component } from "react";
+import { Modal, Form, Input } from "antd";
+import styles from "./UserModal.css";
 
 const FormItem = Form.Item;
 
 class UserEditModal extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      visible: false,
+      visible: false
     };
   }
 
-  showmodalHandler = (e) => {
+  showmodalHandler = e => {
     if (e) e.stopPropagation();
     this.setState({
-      visible: true,
+      visible: true
     });
   };
 
   hidemodalHandler = () => {
     this.setState({
-      visible: false,
+      visible: false
     });
   };
 
@@ -31,6 +30,7 @@ class UserEditModal extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         onOk(values);
+        this.props.form.resetFields();
         this.hidemodalHandler();
       }
     });
@@ -42,14 +42,12 @@ class UserEditModal extends Component {
     const { name, email, website } = this.props.record;
     const formItemLayout = {
       labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
+      wrapperCol: { span: 14 }
     };
 
     return (
       <span>
-        <span onClick={this.showmodalHandler}>
-          { children }
-        </span>
+        <span onClick={this.showmodalHandler}>{children}</span>
         <Modal
           title="Edit User"
           visible={this.state.visible}
@@ -57,35 +55,20 @@ class UserEditModal extends Component {
           onCancel={this.hidemodalHandler}
         >
           <Form horizontal onSubmit={this.okHandler}>
-            <FormItem
-              {...formItemLayout}
-              label="Name"
-            >
-              {
-                getFieldDecorator('name', {
-                  initialValue: name,
-                })(<Input />)
-              }
+            <FormItem {...formItemLayout} label="Name">
+              {getFieldDecorator("name", {
+                initialValue: name
+              })(<Input />)}
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="Email"
-            >
-              {
-                getFieldDecorator('email', {
-                  initialValue: email,
-                })(<Input />)
-              }
+            <FormItem {...formItemLayout} label="Email">
+              {getFieldDecorator("email", {
+                initialValue: email
+              })(<Input />)}
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="Website"
-            >
-              {
-                getFieldDecorator('website', {
-                  initialValue: website,
-                })(<Input />)
-              }
+            <FormItem {...formItemLayout} label="Website">
+              {getFieldDecorator("website", {
+                initialValue: website
+              })(<Input />)}
             </FormItem>
           </Form>
         </Modal>

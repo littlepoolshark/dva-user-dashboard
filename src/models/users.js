@@ -10,6 +10,21 @@ export default {
   reducers: {
     save(state, { payload: { data: list, total, page } }) {
       return { ...state, list, total, page };
+    },
+    modify(state, { payload: { id, values: patchItem } }) {
+      let newList = state.list.map((item, index) => {
+        if (index + 1 === id) {
+          patchItem.id = id;
+          return patchItem;
+        }
+        return item;
+      });
+      return { ...state, list: newList };
+    },
+    add(state, { payload: values }) {
+      let newList = state.list.map(item => item);
+      newList.unshift(values);
+      return { ...state, list: newList, total: state.total + 1 };
     }
   },
   effects: {
@@ -28,6 +43,14 @@ export default {
       yield call(userService.remove, id);
       const page = yield select(state => state.users.page);
       yield put({ type: "fetch", payload: { page } });
+    },
+    *patch({ payload: { id, values } }, { call, put }) {
+      let patchResult = yield call(userService.patch, id, values);
+      yield put({ type: "modify", payload: { id, values } });
+    },
+    *create({ payload: values }, { call, put, select }) {
+      const newItem = yield call(userService.create, values);
+      yield put({ type: "add", payload: values });
     }
   },
   subscriptions: {
